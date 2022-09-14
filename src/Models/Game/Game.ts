@@ -1,4 +1,4 @@
-import Frame from "../Frame/Frame";
+import Frame, { FrameScoreType } from "../Frame/Frame";
 
 export default class Game {
   private _frames: Array<Frame>;
@@ -75,7 +75,7 @@ export default class Game {
     //  or it will get [1st ball, 2nd ball], from final frame
     if (frameIndex === 8) {
       const lastFrame = this._frames[9];
-      if (lastFrame.scoreType === "strike") {
+      if (lastFrame.scoreType === FrameScoreType.strike) {
         return [lastFrame.ball1Score, this._extraBall1];
       }
       return [lastFrame.ball1Score, lastFrame.ball2Score];
@@ -86,7 +86,7 @@ export default class Game {
       const nextFrame = this._frames[frameIndex + 1];
       const secondNextFrame = this._frames[frameIndex + 2];
 
-      if (nextFrame.scoreType === "strike") {
+      if (nextFrame.scoreType === FrameScoreType.strike) {
         return [nextFrame.ball1Score, secondNextFrame.ball1Score];
       }
       return [nextFrame.ball1Score, nextFrame.ball2Score];
@@ -104,14 +104,14 @@ export default class Game {
     secondNextBallScore?: number
   ): number {
     const lastFrame = this._frames[9];
-    if (lastFrame.scoreType === "none") {
+    if (lastFrame.scoreType === FrameScoreType.none) {
       throw new Error(
         "Cannot score extra balls when the last frame is not a spare/strike"
       );
     }
     this._extraBall1 = nextBallScore;
     if (secondNextBallScore !== undefined) {
-      if (lastFrame.scoreType === "spare") {
+      if (lastFrame.scoreType === FrameScoreType.spare) {
         throw new Error(
           "Cannot score two balls when the last frame is not a strike"
         );
@@ -125,10 +125,10 @@ export default class Game {
     let newScore = 0;
     this._frames.forEach((frame, index) => {
       newScore += frame.totalPins;
-      if (frame.scoreType !== "none") {
+      if (frame.scoreType !== FrameScoreType.none) {
         const nextBalls = this.nextBallPinsFromFrame(index);
         newScore += nextBalls[0];
-        if (frame.scoreType === "strike") {
+        if (frame.scoreType === FrameScoreType.strike) {
           newScore += nextBalls[1];
         }
       }

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Game from "./Models/Game/Game";
-import { GameComponent } from "./Components/GameComponent";
+import { GameComponent } from "./Components/GameComponent/GameComponent";
 import Frame from "./Models/Frame/Frame";
 
 function App() {
-  const [game, setGame] = useState(new Game());
+  const [game, setGame] = useState<Game>(new Game());
   useEffect(() => {
     const newGame = new Game();
     newGame.recordFrame(new Frame().RecordSpare(5, 5), 0);

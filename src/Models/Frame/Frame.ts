@@ -1,7 +1,12 @@
+export enum FrameScoreType {
+  "none",
+  "spare",
+  "strike",
+}
 export default class Frame {
   private _ball1Score: number;
   private _ball2Score: number;
-  private _scoreType: "none" | "spare" | "strike";
+  private _scoreType: FrameScoreType;
 
   get ball1Score(): number {
     return this._ball1Score;
@@ -12,7 +17,7 @@ export default class Frame {
   get totalPins(): number {
     return this._ball1Score + this.ball2Score;
   }
-  get scoreType(): "none" | "spare" | "strike" {
+  get scoreType(): FrameScoreType {
     return this._scoreType;
   }
   constructor(frame?: Frame) {
@@ -23,7 +28,7 @@ export default class Frame {
     } else {
       this._ball1Score = 0;
       this._ball2Score = 0;
-      this._scoreType = "none";
+      this._scoreType = FrameScoreType.none;
     }
   }
 
@@ -42,7 +47,7 @@ export default class Frame {
     }
     this._ball1Score = ball1;
     this._ball2Score = ball2;
-    this._scoreType = "none";
+    this._scoreType = FrameScoreType.none;
     return this;
   }
 
@@ -56,7 +61,7 @@ export default class Frame {
     }
     this._ball1Score = ball1;
     this._ball2Score = ball2;
-    this._scoreType = "spare";
+    this._scoreType = FrameScoreType.spare;
     return this;
   }
 
@@ -66,7 +71,7 @@ export default class Frame {
    */
   RecordStrike(): Frame {
     this._ball1Score = 10;
-    this._scoreType = "strike";
+    this._scoreType = FrameScoreType.strike;
     return this;
   }
 }
