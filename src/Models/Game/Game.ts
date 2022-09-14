@@ -1,7 +1,7 @@
 import Frame from "../Frame/Frame";
 
 export default class Game {
-  frames: Array<Frame>;
+  private _frames: Array<Frame>;
 
   // If the final frame is a spare or strike, an extra ball is allowed
   private _extraBall1: number;
@@ -15,14 +15,25 @@ export default class Game {
     return this._score;
   }
 
+  get frames() {
+    return this._frames;
+  }
+
+  get extraBall1() {
+    return this._extraBall1;
+  }
+  get extraBall2() {
+    return this._extraBall2;
+  }
+
   constructor() {
-    this.frames = new Array<Frame>();
+    this._frames = new Array<Frame>();
     this._extraBall1 = 0;
     this._extraBall2 = 0;
     this._score = 0;
 
     for (let i = 0; i < 10; i++) {
-      this.frames[i] = new Frame();
+      this._frames[i] = new Frame();
     }
   }
 
@@ -36,7 +47,7 @@ export default class Game {
     if (frameIndex < 0 || frameIndex > 9) {
       throw new Error("Cannot enter a frame outside of frames 1-10");
     }
-    this.frames[frameIndex] = new Frame(frame);
+    this._frames[frameIndex] = new Frame(frame);
     this.calculateScore();
     return this.score;
   }
@@ -56,15 +67,15 @@ export default class Game {
     }
 
     // final frame gets the two extra balls
-    if (frameIndex == 9) {
+    if (frameIndex === 9) {
       return [this._extraBall1, this._extraBall2];
     }
 
     // second to final frame gets either final frame [1st ball, extra ball 1] (if a strike)
     //  or it will get [1st ball, 2nd ball], from final frame
-    if (frameIndex == 8) {
-      const lastFrame = this.frames[9];
-      if (lastFrame.scoreType == "strike") {
+    if (frameIndex === 8) {
+      const lastFrame = this._frames[9];
+      if (lastFrame.scoreType === "strike") {
         return [lastFrame.ball1Score, this._extraBall1];
       }
       return [lastFrame.ball1Score, lastFrame.ball2Score];
@@ -72,10 +83,10 @@ export default class Game {
     // any other frame gets either next frame [1st ball, secondNext frame 1st ball] (if a strike)
     //  or it will get [1st ball, 2nd ball], from next frame
     else {
-      const nextFrame = this.frames[frameIndex + 1];
-      const secondNextFrame = this.frames[frameIndex + 2];
+      const nextFrame = this._frames[frameIndex + 1];
+      const secondNextFrame = this._frames[frameIndex + 2];
 
-      if (nextFrame.scoreType == "strike") {
+      if (nextFrame.scoreType === "strike") {
         return [nextFrame.ball1Score, secondNextFrame.ball1Score];
       }
       return [nextFrame.ball1Score, nextFrame.ball2Score];
@@ -92,15 +103,15 @@ export default class Game {
     nextBallScore: number,
     secondNextBallScore?: number
   ): number {
-    const lastFrame = this.frames[9];
-    if (lastFrame.scoreType == "none") {
+    const lastFrame = this._frames[9];
+    if (lastFrame.scoreType === "none") {
       throw new Error(
         "Cannot score extra balls when the last frame is not a spare/strike"
       );
     }
     this._extraBall1 = nextBallScore;
     if (secondNextBallScore !== undefined) {
-      if (lastFrame.scoreType == "spare") {
+      if (lastFrame.scoreType === "spare") {
         throw new Error(
           "Cannot score two balls when the last frame is not a strike"
         );
@@ -112,12 +123,12 @@ export default class Game {
   }
   private calculateScore(): void {
     let newScore = 0;
-    this.frames.forEach((frame, index) => {
+    this._frames.forEach((frame, index) => {
       newScore += frame.totalPins;
-      if (frame.scoreType != "none") {
+      if (frame.scoreType !== "none") {
         const nextBalls = this.nextBallPinsFromFrame(index);
         newScore += nextBalls[0];
-        if (frame.scoreType == "strike") {
+        if (frame.scoreType === "strike") {
           newScore += nextBalls[1];
         }
       }

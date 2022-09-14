@@ -51,7 +51,7 @@ export default class Frame {
    * @returns Returns the frame object
    */
   RecordSpare(ball1: number, ball2: number): Frame {
-    if (ball1 + ball2 != 10) {
+    if (ball1 + ball2 !== 10) {
       throw new Error("A spare should have both balls equaling 10 pins");
     }
     this._ball1Score = ball1;
