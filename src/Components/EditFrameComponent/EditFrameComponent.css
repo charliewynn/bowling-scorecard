@@ -1,3 +1,15 @@
 .edit-frame-component {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.edit-frame-component .score {
+  display: flex;
+  flex-direction: column;
+}
+.edit-frame-component .frame-types > button {
+  margin: 0.1em;
+}
+.edit-frame-component .selected {
+  border: 3px solid green;
 }
