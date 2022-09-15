@@ -7,7 +7,6 @@ import "./GameComponent.css";
 import { SpareBallComponent } from "../SpareBallComponent/SpareBallComponent";
 import { EditFrameComponent } from "../EditFrameComponent/EditFrameComponent";
 import Frame, { FrameScoreType } from "../../Models/Frame/Frame";
-import { updateJsxFragment } from "typescript";
 
 type GameProps = {
   game: Game;
